@@ -1,2 +1,2 @@
-# exercise1
-Data Science Exercise
+exercise1
+Data Science
