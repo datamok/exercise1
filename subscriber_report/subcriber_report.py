@@ -84,7 +84,7 @@ class subscriber_report(object):
 
         return end_df
 
-    def main(self):
+    def build_dataset(self):
         filepath = self.filepath
         agg_type = self.agg_type
         year_filter = self.year_filter
@@ -95,6 +95,13 @@ class subscriber_report(object):
         report = self.build_agg_data(data, total_subscribers, agg_type, year_filter)
 
         return report
+
+    def get_markets(self):
+        filepath = self.filepath
+        data = pd.read_excel(filepath)
+        markets = data.market.unique()
+
+        return markets
 
 
 
