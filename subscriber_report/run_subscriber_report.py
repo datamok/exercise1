@@ -60,7 +60,7 @@ for key in dict_keys:
     market = all_dfs[key]['market']
     agg_type = all_dfs[key]['agg_type']
     data = all_dfs[key]['data']
-# hack to get aggregates first
+
     if agg_type == 'week' and market != 'aggregate':
         week_dfs[market] = data
     if agg_type == 'month' and market != 'aggregate':
