@@ -1,12 +1,13 @@
 # Exercise 1 : Automate Excel Report
 
 ### Required Packages:
-Pandas 
-Numpy
-Datetime
-Calendar
-XlsxWriter
-Sys
+
+* Pandas 
+* Numpy
+* Datetime
+* Calendar
+* XlsxWriter
+* Sys
 
 ### How to Run:
 
@@ -21,17 +22,17 @@ After examining the report, it became clear to me that the raw data is being agg
 
 There are three main pieces to the class. Read the data, find ending subscribers, and build the aggregated data. I will touch on these in more detail.
 
-*Read the Data*
+**Read the Data**
 
 The first piece is to read in the data from the raw excel file. Since the aggregations would be sliced by different time periods, I added fields to identify time attributes such as day of week, day of month, month of year, last day of the current month, etc. because I would need to use these as flags for filtering downstream. 
 
-*Get Ending Subscribers*
+**Get Ending Subscribers**
 
 One of the more difficult pieces was knowing how many subscribers the `agg_type` period ended with. For example, if aggregating by `week`, I had to find the number of total_subscribers on the 7th day of the prior week. If `month`. I needed to identify the last day of each month, and grab the total_subscribers from the month prior where the day was equal to the last day of the month.
 
 I used the flags and time attributes in the `read_data` function to identify the right rows of data that contained the ending subscibers in each time period and output these into a dataframe, indexed by the agg_type and year.
 
-*Build Aggregated Data*
+**Build Aggregated Data**
 
 Now that I had the ending subscribers piece, I then filter the data by any filers provided (year or market) and aggregate. `Net gain` is a field that is calculated after the fact, and then I performed a lag function on the `total_subscribers` field to get the `beginning_subscribers` field. The dataframe is then transposed and organized and returned in the output. 
 
