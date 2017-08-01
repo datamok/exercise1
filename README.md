@@ -9,12 +9,16 @@
 * XlsxWriter
 * Sys
 
+---
+
 ### How to Run:
 
 1. Clone the Github Repo to your local machine
 2. Navigate to `exercise1/subscriber_report/`
 3. From the `subscriber_report` directory, run `python run_subscriber_report.py 'path/to/data/file.xslx'`
 4. The report will be dropped in the current working directory `exercise1/subscriber_report` as `subscriber_report.xlsx`
+
+---
 
 ### How it Works
 
@@ -36,11 +40,15 @@ I used the flags and time attributes in the `read_data` function to identify the
 
 Now that I had the ending subscribers piece, I then filter the data by any filers provided (year or market) and aggregate. `Net gain` is a field that is calculated after the fact, and then I performed a lag function on the `total_subscribers` field to get the `beginning_subscribers` field. The dataframe is then transposed and organized and returned in the output. 
 
+---
+
 ### Limitations
 
 The code could be more dry. I end up repeating myself sometimes and I probably don't always use the most efficient or pythonic means of getting what I need.
 
 Also, the format of the output doesn't exactly match the one provided because of a limitation of the package I used, `xlsxwriter`. Apparently, indeces (in report: bolded and outlined) aren't able to be reformatted because they already have a default format and it can't be overridden. This means I wasn't able to match the example report exactly. 
+
+---
 
 
 ### Additional Info / Discussion
