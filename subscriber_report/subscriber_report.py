@@ -10,8 +10,8 @@ class subscriber_report(object):
     Args: 
         filepath (string) : Filepath to the excel file containing raw data
         agg_type (string) : What time level to aggregate by, accepts 'week', 'month', or 'quarter'
-        market (string) : Filters on the market column in the dataset. If None, returns the aggregate
-        year_filter (string) : Filters on the year column in the dataset. If None, returns all years
+        market (string) : Name of market desired. Filters on the market column in the dataset. If None, returns the aggregate
+        year_filter (string) : Year desired in yyyy format. Filters on the year column in the dataset. If None, returns all years
     """
 
     def __init__(self, filepath, agg_type, market=None, year_filter=None):
