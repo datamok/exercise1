@@ -4,6 +4,15 @@ import datetime
 import calendar
 
 class subscriber_report(object):
+    """
+    Creates a subscriber_report class. Contains all functions necessary to run the build script.
+    
+    Args: 
+        filepath (string) : Filepath to the excel file containing raw data
+        agg_type (string) : What time level to aggregate by, accepts 'week', 'month', or 'quarter'
+        market (string) : Filters on the market column in the dataset. If None, returns the aggregate
+        year_filter (string) : Filters on the year column in the dataset. If None, returns all years
+    """
 
     def __init__(self, filepath, agg_type, market=None, year_filter=None):
 
@@ -13,6 +22,9 @@ class subscriber_report(object):
         self.market = market
 
     def read_data(self, filepath, agg_type):
+        """
+        Reads in data from filepath provided, and creates new time columns
+        """
 
         data = pd.read_excel(filepath)
         data['date'] = data.activity_date.apply(lambda x: x.date())
@@ -26,10 +38,12 @@ class subscriber_report(object):
         data['quarter'] = data.month.apply(lambda x: (x-1)  // 3 + 1)
         data['is_last_day_of_quarter'] = np.where(((data.month == 3) & (data.dom == 31)) | ((data.month == 6) & (data.dom == 30)) |
                       ((data.month == 9) & (data.dom == 30)) | ((data.month == 12) & (data.dom == 31)), 1, 0)
-        #data['aggyear'] = data.year.apply(lambda x: agg_type+str(x))
         return data
 
     def get_ending_subscribers(self, data, agg_type, market):
+        """
+        Creates a dataframe of ending subscriber counts for joining on to the aggregated data
+        """
 
         if agg_type == 'week':
             df = data[data.day == 7]
@@ -46,6 +60,9 @@ class subscriber_report(object):
         return total_subscribers
 
     def build_agg_data(self, data, total_subscribers, agg_type, market=None, year_filter=None):
+        """
+        Builds the aggregated dataset with parameters provided. Also creates metrics calculated from aggregates.
+        """
 
         if year_filter:
             df = data[data.year == year_filter]
@@ -65,8 +82,9 @@ class subscriber_report(object):
 
         agg_data['net_gain'] = agg_data.new_subscriptions - agg_data.total_disconnects
 
-        merged_agg_data = agg_data.reset_index().merge(total_subscribers, on=[agg_type, 'year'])
+        merged_agg_data = agg_data.reset_index().merge(total_subscribers, on=[agg_type, 'year']).sort(['year',agg_type])
         merged_agg_data['beginning_subs'] = merged_agg_data.total_subscribers.shift(1)
+
 
         end_df = merged_agg_data.set_index(['year', agg_type]).sort_index().transpose().reindex(['beginning_subs', 'new_subscriptions', 'self_install', 'professional_install',\
                           'total_disconnects', 'post_install_returns', 'disconnects',\
@@ -85,6 +103,9 @@ class subscriber_report(object):
         return end_df
 
     def build_dataset(self):
+        """
+        Function to orchestrate the building sequence
+        """
         filepath = self.filepath
         agg_type = self.agg_type
         year_filter = self.year_filter
@@ -97,6 +118,9 @@ class subscriber_report(object):
         return report
 
     def get_markets(self):
+        """
+        Accessory function to return the list of markets for iteration
+        """
         filepath = self.filepath
         data = pd.read_excel(filepath)
         markets = data.market.unique()
